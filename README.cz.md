@@ -1,7 +1,8 @@
 # correlate-element-maps
 https://github.com/almaavu/correlate-element-maps
 
-**Korelace MA-XRF or SEM-EDS prvkových map. Výpočet Personova korelačního koeficientu dvojic map, uložení tabulky s výsledky do XLS souboru.**
+**Korelace MA-XRF or SEM-EDS prvkových map.** 
+ Výpočet Personova korelačního koeficientu dvojic map, uložení tabulky s výsledky do XLS souboru. 
 
 ### Vstup: 
 Cesta a názvy souborů prvkových map.
@@ -25,18 +26,23 @@ Cesta a názvy souborů prvkových map.
 
 
 
-### resources:
+### Odkazy:
+
+https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
+
+https://imagej.net/imaging/colocalization-analysis
 
 
 
-## Example:
 
-### Source images:
+## Ukázka:
+
+### Prvkové mapy:
 <p align="center">
 
 </p>
 
-### Result:
+### Výsledek:
 <p align="center">
 
 </p>
