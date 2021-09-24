@@ -12,7 +12,7 @@ https://github.com/almaavu/correlate-element-maps
 ### Zpracování:
 - Načtení dvojic prvkových map. Obrázky se načítají do cache pro urychlení zpracování stejného obrázku v dalších krocích.
 - Výpočet Pearsonova korelačního koeficientu.
-- Zpracování výsledků ve formátu pandas DataFrame, řazení podle hodnoty r^2.
+- Zpracování výsledků ve formátu pandas DataFrame, řazení podle hodnoty $r^2$.
 - Uložení do XLS souboru.
 
 
