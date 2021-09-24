@@ -40,12 +40,6 @@ Skript je možné spustit i bez instalace:
 
 
 
-
-### TODO:
--
-
-
-
 ### Odkazy:
 
 https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
