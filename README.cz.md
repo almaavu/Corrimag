@@ -4,6 +4,25 @@ https://github.com/almaavu/correlate-element-maps
 **Korelace MA-XRF or SEM-EDS prvkových map.** 
  Výpočet Personova korelačního koeficientu dvojic map, uložení tabulky s výsledky do XLS souboru. 
 
+
+### Instalace:
+Instalace programovacího jazyka Python3
+
+    https://www.python.org/downloads/
+    
+Instalace programu correlate-element-maps
+
+    python -m pip install git+https://github.com/almaavu/correlate-element-maps.git
+
+### Použití:
+
+    python -m correlate_element_maps --maps-dir="d:/maps"
+    
+Skript je možné spustit i bez instalace:
+
+    python correlate_element_maps.py --maps-dir="d:/maps"
+
+
 ### Vstup: 
 - Cesta a názvy souborů prvkových map.
 - Tabulka vybraných dvojic prvků určených pro výpočet korelace. (Alternativně lze korelace počítat pro všechny možné kombinace prvkových map, pokud je přijatelná delší doba potřebná pro výpočet.) 
