@@ -3,19 +3,23 @@ https://github.com/almaavu/correlate-element-maps
 
 **Correlate MA-XRF or SEM-EDS element maps. Calculate Person correlation coefficients of image pairs, save results to excel file.**
 
+
+
+
+
 ### Input: 
 File paths of element maps.
 
 
 
 ### Process:
-- 
+Calculate Pearson correlation coefficient
 
 
 
 
 ### Output:
-- XLS file with Pearson correlations
+XLS file with Pearson correlations
 
 
 
@@ -26,7 +30,9 @@ File paths of element maps.
 
 
 ### resources:
+https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
 
+https://imagej.net/imaging/colocalization-analysis
 
 
 ## Example:
