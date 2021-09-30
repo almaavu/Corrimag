@@ -53,18 +53,14 @@ https://imagej.net/imaging/colocalization-analysis
 
 ### Prvkové mapy:
 
-<p align="center">
 
-</p>
-
-<p align="center">
-  <img src="sample/Ca.jpg" width="100" title="">
-  <img src="sample/Cr.jpg" width="100" title="">
+<img src="sample/Ca.jpg" width="100" title="">
+<img src="sample/Cr.jpg" width="100" title="">
 <img src="sample/Hg.jpg" width="100" title="">
 <img src="sample/Pb-LB.jpg" width="100" title="">
 <img src="sample/S.jpg" width="100" title="">
 <img src="sample/Zn-KB.jpg" width="100" title="">
-</p>
+
 
 ### Výsledek:
 <table border="1" class="dataframe">
