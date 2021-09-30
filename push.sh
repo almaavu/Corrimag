@@ -5,10 +5,7 @@
 
 
 desc=1
-#read -p "Commit description: " desc
-
-
-#read -p "Commit description: " desc
+read -p "Commit description: " desc
 
 
 git add .

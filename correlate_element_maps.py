@@ -18,14 +18,9 @@ https://en.wikipedia.org/wiki/Simple_linear_regression
 https://en.wikipedia.org/wiki/Colocalization
 
 
-
-TODO:
-    - correlation matrix with histograms
-    https://stackoverflow.com/questions/48139899/correlation-matrix-plot-with-coefficients-on-one-side-scatterplots-on-another
 '''
 
 # IMPORTS --------------------------------------------
-
 
 
 from sys import argv
@@ -38,7 +33,6 @@ from functools import lru_cache
 
 import numpy as np
 import pandas as pd
-#import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib import rcParams, cm
 from matplotlib.colors import LogNorm
@@ -215,6 +209,63 @@ class Correlations:
             # ~ writer.save()
 
 
+
+
+
+#%%
+# FUNCTIONS --------------------------------------------
+
+@lru_cache()
+def cached_array(fpath, blur_sigma=0, oval_mask=False):
+    '''Load and preprocess image as numpy array, cache images for fast reuse.'''
+
+    im = load_image(fpath)
+    if im.ndim > 2: # if RGB or RGBA, use mean of channels
+        im = np.mean(im[:,:,:3], axis=2)
+    im =  gaussian_filter(im, blur_sigma)
+    if oval_mask:
+        im = im_mask.apply_oval_mask(im)
+    # print(im.shape, im.dtype, type(im))
+    #im = im.ravel()
+    return im
+
+
+def load_image(fp):
+    ''' load image from fp and return numpy float array (0..1) '''
+    fp = Path(fp)
+    if fp.suffix == ".txt":
+        im = np.loadtxt(fp, dtype=np.uint16, delimiter=";")
+    else:
+        im = imread(fp)
+    return img_as_float(im)
+
+
+def pearson_correlation(x, y):
+    """
+    Args: x,y - masked arrays
+    Return: dict of floats
+
+    """
+    x, y = x.ravel(), y.ravel()
+    r = np.ma.corrcoef(x, y)[0, 1]
+    r2 = r**2
+    coef = (np.nan, np.nan)
+    if r2 >= CFG['min_r2']:
+        try:
+            coef = np.ma.polyfit(y, x, deg=1)   # y,x => ratio el1 / el2
+        except BaseException:
+            logging.exception("Polyfit failed")
+    return {"r2":r2, "r":r, "m":coef[0], "b":coef[1]}
+
+def thresholded_pearson_correlation(x, y, tmin, tmax):
+    """
+    Mask data where data <= or >= than thresholds,
+    get pearson correlations.
+    """
+    x = np.ma.masked_where((x <= tmin) | (x >= tmax), x, copy=True)
+    y = np.ma.masked_where((y <= tmin) | (y >= tmax), y, copy=True)
+    return pearson_correlation(x, y)
+
 def plot_corr_matrix(paths, bins=60, norm=LogNorm(), outdir="."):
 
     outdir = Path(outdir)
@@ -249,16 +300,10 @@ def plot_corr_matrix(paths, bins=60, norm=LogNorm(), outdir="."):
                 axes[i,j].text(0, 0, r, color="white", size=r**(2/3)*60)
 
             elif i == j:  # diag - histogram
-
                 H, edges = np.histogram(x.ravel(), bins=bins, density=False  )
-#                print(H, H.shape, H.max())
-#                print(edges, edges.shape, edges.max())
-#                axes[i,j].hist(cached_array(n).ravel(), bins=bins )
-#                axes[i,j].bar(edges[:-1], H**.5, width=1/bins, color="lightblue")
-                axes[i,j].fill_between(edges[:-1], H**.5, color="lightblue")
+                axes[i,j].fill_between(edges[:-1], H**.5, color="lightblue")  # square root histogram
                 axes[i,j].set_xlim(0,1)
                 axes[i,j].set_ylim(0,None)
-                ...
 
             elif i < j:  # top - overlay
                 im = np.dstack((x,y,np.zeros_like(x)))
@@ -266,22 +311,25 @@ def plot_corr_matrix(paths, bins=60, norm=LogNorm(), outdir="."):
                 r = round(pearson_correlation(x,y)['r'],2)
                 axes[i,j].text(0, x.shape[0], r, color="white", size=r**(2/3)*60)
 
-#    for i, ax, col in enumerate(zip(axes[0], names)):
-#        fig.text(.5,0,col, size=40)
     # row and column lables   https://stackoverflow.com/questions/25812255/row-and-column-headers-in-matplotlibs-subplots
     pad = 5 # in points
-    for ax, col in zip(axes[0], names):
+    for ax, col in zip(axes[0], names):  # top
         ax.annotate(col, xy=(0.5, 1), xytext=(0, pad),
                     xycoords='axes fraction', textcoords='offset points',
                     size=40, ha='center', va='baseline')
+    for ax, col in zip(axes[-1], names): # bottom
+        ax.annotate(col, xy=(0.5, -.2), xytext=(0, -pad),
+                    xycoords='axes fraction', textcoords='offset points',
+                    size=40, ha='center', va='baseline')
 
-    for ax, row in zip(axes[:,0], names):
+    for ax, row in zip(axes[:,0], names): # left
         ax.annotate(row, xy=(0, 0.5), xytext=(-ax.yaxis.labelpad - pad, 0),
                     xycoords=ax.yaxis.label, textcoords='offset points',
                     size=40, ha='right', va='center', rotation=90)
-#    rcParams['xtick.bottom'] = False
-#    plt.tick_params(axis='y', which='both', labelleft=True, labelright=True)
-#    plt.tick_params(axis='x', which='both', labeltop=True, labelbottom=True)
+#    for ax, row in zip(axes[:,-1], names): # right
+#        ax.annotate(row, xy=(1.4, 0.5), xytext=(ax.yaxis.labelpad + pad, 0),
+#                    xycoords=ax.yaxis.label, textcoords='offset points',
+#                    size=40, ha='right', va='center', rotation=90)
 
     plt.tight_layout()
     plt.savefig(outdir / 'corr_matrix.png', dpi=150)
@@ -290,65 +338,10 @@ def plot_corr_matrix(paths, bins=60, norm=LogNorm(), outdir="."):
 
 
 
-#%%
-# FUNCTIONS --------------------------------------------
-
-# alternative to ImageCache
-
-@lru_cache()
-def cached_array(fpath, blur_sigma=0, oval_mask=False):
-    '''Load and preprocess image as numpy array, cache images for fast reuse.'''
-
-    im = load_image(fpath)
-    if im.ndim > 2: # if RGB or RGBA, use mean of channels
-        im = np.mean(im[:,:,:3], axis=2)
-    im =  blur(im, blur_sigma)
-    if oval_mask:
-        im = im_mask.apply_oval_mask(im)
-    # print(im.shape, im.dtype, type(im))
-    #im = im.ravel()
-    return im
 
 
-def load_image(fp):
-    ''' load image from fp and return numpy float array (0..1) '''
-    fp = Path(fp)
-    if fp.suffix == ".txt":
-        im = np.loadtxt(fp, dtype=np.uint16, delimiter=";")
-    else:
-        im = imread(fp)
-    return img_as_float(im)
 
 
-def blur(array, sigma):
-    return gaussian_filter(array, sigma)
-
-
-def pearson_correlation(x, y):
-    """
-    Args: x,y - masked arrays
-    Return: dict of floats
-
-    """
-    x, y = x.ravel(), y.ravel()
-    r = np.ma.corrcoef(x, y)[0, 1]
-    r2 = r**2
-    coef = (np.nan, np.nan)
-    if r2 >= CFG['min_r2']:
-        try:
-            coef = np.ma.polyfit(y, x, deg=1)   # y,x => ratio el1 / el2
-        except BaseException:
-            logging.exception("Polyfit failed")
-    return {"r2":r2, "r":r, "m":coef[0], "b":coef[1]}
-
-def thresholded_pearson_correlation(x, y, tmin, tmax):
-    """
-    Mask data where data <= or >= than thresholds,
-    get pearson correlations.
-    """
-    x = np.ma.masked_where((x <= tmin) | (x >= tmax), x, copy=True)
-    y = np.ma.masked_where((y <= tmin) | (y >= tmax), y, copy=True)
-    return pearson_correlation(x, y)
 
 
 
@@ -363,54 +356,6 @@ def dataframe_from_nested_dict(list_of_dicts):
     return(df)
 
 
-
-def plot_2d_hist(y, x, ylab, xlab, fpath=None, bns=50, norm=LogNorm()):
-    """
-    https://foxlab.ucdavis.edu/2013/06/05/visualizing-the-correlation-of-two-volumes/
-    """
-
-    x, y = x.ravel(), y.ravel()
-
-#    axHist2d = plt.subplot2grid( (9,9), (0,0), colspan=9, rowspan=9)
-    ax = plt.gca()
-    H, xedges, yedges = np.histogram2d( x, y, bins=bns )
-    ax.imshow(H.T + .001, interpolation='nearest', aspect='auto', cmap='jet',  norm=norm)
-
-    # mpl.rc('xtick', labelsize=15)
-    # mpl.rc('ytick', labelsize=15)
-#    ax.set_xlabel(xlab, fontsize=20)
-#    ax.set_ylabel(ylab, fontsize=20)
-
-#    nullfmt = NullFormatter()
-
-    axHist2d.invert_yaxis()
-#    axHist2d.autoscale()
-
-#    print(x,y,x.min, )
-    # xmin = max(x.max(),50)
-    # ymin = max(y.max(),50)
-
-    # axHist2d.set_xlim( [0,xmin] )
-    # axHist2d.set_ylim( [0,ymin] )
-
-    plt.tick_params(
-                    axis='both',          # changes apply to the x-axis
-                    which='both',      # both major and minor ticks are affected
-                    left=False,      # ticks along the bottom edge are off
-                    right=False,      # ticks along the bottom edge are off
-                    bottom=False,      # ticks along the bottom edge are off
-                    top=False,         # ticks along the top edge are off
-                    labelbottom=False,
-                    labelleft=False,
-                    )
-
-    # save to file
-#    fpath = fpath or f"{ylab}_{xlab}_hist.png"
-#    logging.info(f"save {fpath}")
-#    plt.tight_layout()
-#    fig.savefig(fpath)
-#    plt.show()
-#    plt.clf()
 
 
 
