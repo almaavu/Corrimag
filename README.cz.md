@@ -60,3 +60,13 @@ https://imagej.net/imaging/colocalization-analysis
 <p align="center">
 
 </p>
+
+<p align="center">
+  <img src="sample/Ca.jpg" width="50" title="">
+
+</p>
+
+### Result:
+<p align="center">
+  <img src="samples/false_color_images/ir_image_vis_image_falsecolor.png" width="150">
+</p>
