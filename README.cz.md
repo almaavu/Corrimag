@@ -67,7 +67,7 @@ https://imagej.net/imaging/colocalization-analysis
 </p>
 
 ### Výsledek:
-<table border="1" class="center">
+<table border="1" style="margin:auto">
   <thead>
     <tr style="text-align: right;">
       <th></th>
