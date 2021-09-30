@@ -67,7 +67,7 @@ https://imagej.net/imaging/colocalization-analysis
 </p>
 
 ### Výsledek:
-<table border="1" class="dataframe">
+<table border="1" class="dataframe center">
   <thead>
     <tr style="text-align: right;">
       <th></th>
