@@ -1,15 +1,32 @@
 #!/usr/bin/env python3
 '''
-Calculate Pearson correlation for each image in given folder -> dataframe
+Calculate Pearson correlation for image pairs from given folder -> dataframe
+- all images must be of same shape
 - image preprocessing: oval mask for miniature paintings, gaussian blur)
-- sort and filter results by minimal r2 value (set in CFG)
-- add comments from file correlations_comments.xls
-Save results to XLSX
+- sort and filter results by r value 
+- save results to XLSX file
+
+r = Pearson correlation coefficient
+r2 = Coefficient of determination
+m = regression slope
+a = regression intercept
+
+sources:
+https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
+https://en.wikipedia.org/wiki/Coefficient_of_determination
+https://en.wikipedia.org/wiki/Simple_linear_regression
+https://en.wikipedia.org/wiki/Colocalization
+
+
+
+TODO:
+    - correlation matrix with histograms
+    https://stackoverflow.com/questions/48139899/correlation-matrix-plot-with-coefficients-on-one-side-scatterplots-on-another
 '''
 
 # IMPORTS --------------------------------------------
 
-import numpy as np
+
 
 from sys import argv
 import logging
@@ -18,14 +35,17 @@ from pathlib import Path
 import copy
 import itertools
 from functools import lru_cache
-#from imageio import imread
 
+import numpy as np
 import pandas as pd
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib import rcParams, cm
 from matplotlib.colors import LogNorm
+from scipy.ndimage.filters import gaussian_filter
+from imageio import imread
+from skimage import img_as_float
 
-from qq.npimage import blur
 from pyalma.common.almalib import load_image
 from pyalma.ma_xrf.maps.tools import im_mask
 
@@ -34,23 +54,24 @@ COMMENTS_FPATH = SC_FPATH.parent / "correlations_comments.xlsx"
 
 
 CFG = {
-            'oval_mask': True,
-            'blur_sigma': 3,
-            'blur_mode': 'gaussian',
+            'oval_mask': False,
+            'blur_sigma': 2,
             'min_threshold': 0.1,
             'max_threshold': .95,
             'view_gamma': .6,
             'min_r2': .1,
-            'in_file_extension':'.png',
+            'in_file_mask':'*.jpg',
             'in_file_bitdepth':16,
             'excluded' : ("VIS", "Video 1", "mosaic", "parameters", "p", "Rh", "Rh-KA1", "Rh-LA1", "U"),
         }
 
 
+pd.options.display.float_format = '{:,.2f}'.format
 plt.style.use('dark_background')
 rcParams['figure.figsize'] = 3, 3
 rcParams['pdf.fonttype'] = 42
 rcParams['ps.fonttype'] = 42
+rcParams['font.size'] = 12
 rcParams['text.usetex'] = False
 rcParams['font.sans-serif'] = 'Arial'
 rcParams['font.family'] = 'sans-serif'
@@ -74,49 +95,158 @@ logging.getLogger('matplotlib.font_manager').disabled = True
 
 # %%
 
-
-
 def main():
 
-    start_time = time.time()
-
+    start_time = time.time()    
+    
     logging.basicConfig(
         level=20,
         format='!%(levelno)s [%(module)10s%(lineno)4d]\t%(message)s')
-
-    root = argv[1] if len(argv) > 1 else "."
-
-    correlate_images(root)
-
-    print(f"Correlation done in {time.time()-start_time:.2f} s")
-
-
-
-def correlate_images(root="."):
-
-    # Get filepaths
-    root = Path(root).resolve()
-    absdir = Path(root, "maps_abs").resolve()
-
-    print(f"Correlate files in {absdir}")
-    fs = sorted(list(absdir.glob("*"+CFG["in_file_extension"])))
-    fs = [f for f in fs if f.stem not in CFG['excluded']]
-    [print(f.stem,end=" ") for f in fs]
-    print()
-
-    # Calculate correlations of all maps in directory
-    c = Correlations(fs, cfg=CFG)
     
-    # add comments from xls file
-    c.add_comments() 
-        
-    print(c.result)
+    
 
-    # Save results to XLS
-    c.save(root / f"{get_meas_id(root)}_correlations.xls")
+    logging.info(f"{__file__} started")
+
+    # get root dir from command line or use default
+    root = argv[1] if len(argv) > 1 else "sample"
+    
+    # get all files in root dir
+    root = Path(root)
+    fs = sorted(list(root.glob(CFG["in_file_mask"])))
+    fs = [f for f in fs if f.stem not in CFG["excluded"]]
+    
+    # get all paths combinations
+    pairs = list(itertools.combinations(fs, 2))
+    # print(pairs)
+
+    c = Correlations(pairs, cfg=CFG)
+    print(c.result.fillna(''))
+
+    c.to_excel(root / "correlations.xlsx")
+    
+    c.plot_2D_hist(outdir="2d_hist")
+    
+    logging.info(f"Correlation done in {time.time()-start_time:.2f} s")
+
+
+#%%
+class Correlations:
+    """Calculate correlations ."""
+
+    def __init__(self, pairs, cfg):
+        self.cfg = cfg
+        self.path_pairs = pairs
+
+        self.name_pairs = [f"{f1.stem} {f2.stem}" for f1,f2 in self.path_pairs] # all name combinations
+        
+        self.array_pairs = self._load_arrays()  # list of numpy array pairs
+        self.result = self.multiprocess_correlations(self.array_pairs)
+
+    def _load_arrays(self):
+        '''Load images from files, preprocess images (smoothing, oval mask)
+        Return: list of numpy array pairs
+        '''
+        rows = []
+        for pair in self.path_pairs:
+            images = [cached_array(f) for f in pair]
+            rows.append(images)
+        return rows
+
+    def _list2df(self, results):
+        df = pd.DataFrame(results)
+        df = df.astype(float)
+        df.insert(0, 'pair', self.name_pairs)
+        df.sort_values('r', inplace=True, ascending=False)
+        return df
+
+    def process_correlations(self, array_pairs):
+        results = []
+        for x,y in array_pairs:
+            c = pearson_correlation(x,y)
+            results.append(c)
+
+        return self._list2df(results)
+
+    def multiprocess_correlations(self, array_pairs):
+        '''about 30% faster than single process, can be optimized better?'''
+        from multiprocessing import Pool
+
+        with Pool() as pool:
+            results = pool.starmap(pearson_correlation, (array_pairs))
+        
+        return self._list2df(results)
+
+
+    def add_comments(self):
+        comments = pd.read_excel(COMMENTS_FPATH, index_col=0)
+        df = self.result.merge(comments, left_on='pair', right_index=True)
+        return df
+
+    def plot_2D_hist(self, outdir="2d_hist"):
+        outdir = Path(outdir)
+        outdir.mkdir(exist_ok=True)
+        
+        for pair in self.path_pairs:
+            a, b = pair
+            plot_2d_hist(cached_array(a), cached_array(b), a.stem, b.stem, fpath=outdir / f"{a.stem}_{b.stem}")
+        
+        
+        
+        
+    def to_excel(self, fpath):
+        
+        df = self.result
+        sheet = "correlations"
+        with pd.ExcelWriter(fpath, engine='xlsxwriter') as writer:
+
+            df.to_excel(writer, index=False, sheet_name=sheet, freeze_panes=(1,1), float_format="%.2f")
+
+            worksheet = writer.sheets[sheet]
+            worksheet.set_column(0, 0, 20)  # first column width
+            worksheet.set_column(1, 20, 10)  # next col widths
+            worksheet.conditional_format('B1:B500', {'type': '3_color_scale',
+                                                 'min_type':'num', 'min_value':.4,'min_color': "#ffffff",
+                                                'mid_type':'num', 'mid_value':.9, 'mid_color': "#ffff99",
+                                                'max_type':'num', 'max_value':1, 'max_color': "#ff9999"})
+            # ~ writer.save()
+
+
+
+
+
 
 #%%
 # FUNCTIONS --------------------------------------------
+
+# alternative to ImageCache
+
+@lru_cache()
+def cached_array(fpath, blur_sigma=0, oval_mask=False):
+    '''Load and preprocess image as numpy array, cache images for fast reuse.'''
+    
+    im = load_image(fpath)
+    if im.ndim > 2: # if RGB or RGBA, use only first channel
+        im = im[:,:,0]
+    im =  blur(im, blur_sigma)
+    if oval_mask:
+        im = im_mask.apply_oval_mask(im)
+    # print(im.shape, im.dtype, type(im))
+    #im = im.ravel()
+    return im
+
+
+def load_image(fp):
+    ''' load image from fp and return numpy float array (0..1) '''
+    fp = Path(fp)
+    if fp.suffix == ".txt":
+        im = np.loadtxt(fp, dtype=np.uint16, delimiter=";")
+    else:
+        im = imread(fp)
+    return img_as_float(im)
+
+
+def blur(array, sigma):
+    return gaussian_filter(array, sigma)
 
 
 def pearson_correlation(x, y):
@@ -124,6 +254,7 @@ def pearson_correlation(x, y):
     Args: x,y - 1d masked arrays
     Return: dict of floats
     """
+    x, y = x.ravel(), y.ravel()
     r = np.ma.corrcoef(x, y)[0, 1]
     r2 = r**2
     coef = (np.nan, np.nan)
@@ -139,15 +270,10 @@ def thresholded_pearson_correlation(x, y, tmin, tmax):
     Mask data where data <= or >= than thresholds,
     get pearson correlations.
     """
+    x, y = x.ravel(), y.ravel()
     x = np.ma.masked_where((x <= tmin) | (x >= tmax), x, copy=True)
     y = np.ma.masked_where((y <= tmin) | (y >= tmax), y, copy=True)
     return pearson_correlation(x, y)
-
-
-
-def get_meas_id(root):
-    '''Get measurement id from parent folder name'''
-    return Path(root).stem.split("_")[0]
 
 
 
@@ -161,24 +287,27 @@ def dataframe_from_nested_dict(list_of_dicts):
     df = pd.DataFrame(new_list)
     return(df)
 
-def plot_2d_hist(y, x, ylab, xlab, outdir=".", bns=range(0,5000,1), ylim=50, norm=LogNorm()):
+def plot_2d_hist(y, x, ylab, xlab, fpath=None, bns=50, norm=LogNorm()):
     """
     https://foxlab.ucdavis.edu/2013/06/05/visualizing-the-correlation-of-two-volumes/
     """
-    print("x,y,x.min,y.min, x.max, y.max")
-    print(x,y,x.min(),y.min(), x.max(), y.max())
+    fpath = fpath or f"{ylab}_{xlab}_hist.png"
     plt.rcParams.update({'font.size':32})
     from matplotlib.ticker import NullFormatter
-    logging.debug(f"plot hist {xlab} {ylab} {x.shape} {y.shape}")
+    logging.info(f"plot 2D histogram of {xlab}, {ylab}")
+    x, y = x.ravel(), y.ravel()
+    
     fig = plt.figure(2, figsize=(8, 8)) # fig number 2
+    
 
     axHist2d = plt.subplot2grid( (9,9), (0,0), colspan=9, rowspan=9)
-
-    H, xedges, yedges = np.histogram2d( x, y, bins=(bns,bns) )
+    H, xedges, yedges = np.histogram2d( x, y, bins=bns )
     axHist2d.imshow(H.T + .001, interpolation='nearest', aspect='auto', cmap='jet',  norm=norm)
-
-    axHist2d.set_xlabel(xlab, fontsize=32)
-    axHist2d.set_ylabel(ylab, fontsize=32)
+    
+    # mpl.rc('xtick', labelsize=15) 
+    # mpl.rc('ytick', labelsize=15) 
+    axHist2d.set_xlabel(xlab, fontsize=20)
+    axHist2d.set_ylabel(ylab, fontsize=20)
 
     nullfmt = NullFormatter()
 
@@ -186,17 +315,38 @@ def plot_2d_hist(y, x, ylab, xlab, outdir=".", bns=range(0,5000,1), ylim=50, nor
 #    axHist2d.autoscale()
 
 #    print(x,y,x.min, )
-    xmin = max(x.max(),50)
-    ymin = max(y.max(),50)
+    # xmin = max(x.max(),50)
+    # ymin = max(y.max(),50)
 
-    axHist2d.set_xlim( [0,xmin] )
-    axHist2d.set_ylim( [0,ymin] )
+    # axHist2d.set_xlim( [0,xmin] )
+    # axHist2d.set_ylim( [0,ymin] )
+    
+    plt.tick_params(
+                    axis='both',          # changes apply to the x-axis
+                    which='both',      # both major and minor ticks are affected
+                    left=False,      # ticks along the bottom edge are off
+                    right=False,      # ticks along the bottom edge are off
+                    bottom=False,      # ticks along the bottom edge are off
+                    top=False,         # ticks along the top edge are off
+                    labelbottom=False,
+                    labelleft=False,
+                    )
+    
+    
+    
+    
+    
     # save to file
+    
+    
+    
+    
     fname = f"{ylab}_{xlab}.png"
 #    print(f"save {fname}")
     plt.tight_layout()
-    fig.savefig(outdir / fname)
-    fig.clear()
+    fig.savefig(fpath)
+    plt.show()
+    plt.clf()
 
 
 def set_nan_color(col='white'):
@@ -275,144 +425,6 @@ def plot_stats(result, images):
 
 
 
-
-
-# alternative to ImageCache
-
-@lru_cache()
-def im_array(fpath, blur_sigma=0, blur_mode="gaussian", oval_mask=True):
-    im = load_image(fpath)
-    im =  blur(im, blur_sigma, blur_mode)
-    if oval_mask:
-        im = im_mask.apply_oval_mask(im)
-    # print(im.shape, im.dtype, type(im))
-    #im = im.ravel()
-    return im
-
-#%%
-
-class ImageCache:
-    '''Load image from cache if cached else from disk.'''
-
-    def __init__(self, cfg):
-        self.cached = {}
-        self.sigma = cfg['blur_sigma']
-        self.mode = cfg['blur_mode']
-
-    def get(self, fpath):
-
-        fpath = Path(fpath)
-        if not fpath in self.cached:
-            # load numpy array
-            im = load_image(fpath)
-            # apply noise reduction
-            im =  blur(im, self.sigma, self.mode)
-            if CFG["oval_mask"]:
-                im = im_mask.apply_oval_mask(im)
-                # print(im.shape, im.dtype, type(im))
-            im = im.ravel()
-            # save to cache
-            self.cached[fpath] = im
-
-        return self.cached[fpath]
-
-
-
-#%%
-class Correlations:
-    """Calculate correlations ."""
-
-    def __init__(self, fpaths, cfg):
-        self.cfg = cfg
-        self.fpaths = fpaths
-        self.image_cache = ImageCache(cfg) # cache images - faster run
-        self.pairs = list(itertools.combinations(self.fpaths, 2)) # all Paths combinations
-        self.names = [f"{f1.stem} {f2.stem}" for f1,f2 in self.pairs] # all name combinations
-        self.arrays = self._load_arrays()  # all array combinations
-        self.result = self.multiprocess_correlations()
-#        self.result = self.process_correlations()
-        self.result = self.add_comments()
-
-    def _load_arrays(self):
-        rows = []
-        for pair in self.pairs:
-#            print(pair)
-            images = [self.image_cache.get(f) for f in pair]
-            rows.append(images)
-#        print(rows)
-        return rows
-
-#    def process_correlations(self):
-#        rows = []
-#        for x,y in self.arrays:
-#            c = pearson_correlation(x,y)
-#            rows.append(c)
-#
-#        df = pd.DataFrame(rows)
-#        df = df.astype(float)
-#        df.set_index(pd.Series(self.names), inplace=True)
-#
-#        return df
-
-    def multiprocess_correlations(self):
-        '''about 30% faster than single process, can be optimized better?'''
-        from multiprocessing import Pool
-
-        with Pool() as pool:
-            c = pool.starmap(pearson_correlation, (self.arrays))
-
-        df = pd.DataFrame(c)
-        df = df.astype(float)
-        df.insert(0, 'pair', self.names)
-#        df = df.rename_axis("pair")
-        # print(df)
-#        df = df.index.names = ['pair']
-
-        return df
-
-
-    def add_comments(self):
-        comments = pd.read_excel(COMMENTS_FPATH, index_col=0)
-        df = self.result.merge(comments, left_on='pair', right_index=True)
-        return df
-
-
-    def save(self, fpath):
-        
-        df = self.result
-
-        # df = df[df.r2 > self.cfg["min_r2"]]
-
-        df = df.sort_values(by='r', ascending=False)
-
-        # print(df)
-
-        df1 = df
-        # df1 = df[(~(df.overlap==1) & ~(df.identity==1))]
-        df3 = df[(df.overlap==1)]
-        df2 = df[(df.identity==1)]
-        df4 = df[(df.pigment==1)]
-
-        dfs = {'correlations':df1,'identity':df2,'overlaps':df3, 'pigment':df4}
-        sheets = dfs.keys()
-
-        fpath = Path(fpath).with_suffix(".xlsx")
-
-        with pd.ExcelWriter(fpath, engine='xlsxwriter') as writer:
-
-            for sheet in sheets:
-
-                df = dfs[sheet]
-                df.to_excel(writer, index=False, sheet_name=sheet, freeze_panes=(1,1),float_format="%.2f")
-
-                worksheet = writer.sheets[sheet]
-                worksheet.set_column(0, 0, 20)  # first column width
-                worksheet.set_column(1, 20, 10)  # next col widths
-                worksheet.conditional_format('B1:B500', {'type': '3_color_scale',
-                                                     'min_type':'num', 'min_value':.4,'min_color': "#ffffff",
-                                                    'mid_type':'num', 'mid_value':.9, 'mid_color': "#ffff99",
-                                                    'max_type':'num', 'max_value':1, 'max_color': "#ff9999"})
-                # ~ writer.save()
 
 
 
