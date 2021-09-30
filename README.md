@@ -28,12 +28,6 @@ Without installation:
 
 
 
-### Processing:
-- Načtení dvojic prvkových map. Obrázky se načítají do cache pro urychlení zpracování stejného obrázku v dalších krocích.
-- Výpočet Pearsonova korelačního koeficientu.
-- Zpracování výsledků ve formátu pandas DataFrame, řazení podle hodnoty r<sup>2</sup>.
-- Uložení do XLS souboru.
-
 
 ### Result:
 - XLSX file with correlation coefficients
