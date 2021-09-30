@@ -201,4 +201,4 @@ https://imagej.net/imaging/colocalization-analysis
     </tr>
   </tbody>
 </table>
-<img src="sample/corr_matrix.png" width="400" title="">
+<img src="sample/corr_matrix.png" width="800" title="">
