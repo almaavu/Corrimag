@@ -74,7 +74,7 @@ def main():
     print("pairgrid")
     g = sns.PairGrid(df, aspect=1, diag_sharey=False)
     print("lower")
-    g.map_lower(sns.scatterplot)
+    g.map_lower(sns.scatterplot, size=1)
     print("diag")
     g.map_diag(sns.histplot, kde_kws={'color': 'black'})
     print("upper")

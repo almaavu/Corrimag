@@ -4,7 +4,7 @@
 #git rm -r --cached .
 
 
-desc=minor
+desc=1
 #read -p "Commit description: " desc
 
 

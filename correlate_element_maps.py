@@ -123,6 +123,7 @@ def main():
     print(c.result.fillna(''))
 
     c.to_excel(root / "correlations.xlsx")
+    c.result.fillna('').to_html(Path("sample") / "correlations.html")
     
     c.plot_2D_hist(outdir="2d_hist")
     
@@ -251,8 +252,9 @@ def blur(array, sigma):
 
 def pearson_correlation(x, y):
     """
-    Args: x,y - 1d masked arrays
+    Args: x,y - masked arrays
     Return: dict of floats
+    
     """
     x, y = x.ravel(), y.ravel()
     r = np.ma.corrcoef(x, y)[0, 1]
@@ -270,7 +272,6 @@ def thresholded_pearson_correlation(x, y, tmin, tmax):
     Mask data where data <= or >= than thresholds,
     get pearson correlations.
     """
-    x, y = x.ravel(), y.ravel()
     x = np.ma.masked_where((x <= tmin) | (x >= tmax), x, copy=True)
     y = np.ma.masked_where((y <= tmin) | (y >= tmax), y, copy=True)
     return pearson_correlation(x, y)
