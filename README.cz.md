@@ -14,6 +14,18 @@ Instalace programu correlate-element-maps
 
     python -m pip install git+https://github.com/almaavu/correlate-element-maps.git
 
+Instalace knihoven:
+
+    python -m pip install --upgrade requirements.txt
+    
+* numpy
+* pandas
+* matplotlib
+* scipy
+* scikit-image
+* imageio
+
+
 ### Použití:
 
     python -m correlate_element_maps --maps-dir="d:/maps"
