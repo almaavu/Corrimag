@@ -37,20 +37,19 @@ Skript je možné spustit i bez instalace:
 
 
 ### Vstup: 
-- Cesta a názvy souborů prvkových map.
-- Tabulka vybraných dvojic prvků určených pro výpočet korelace. (Alternativně lze korelace počítat pro všechny možné kombinace prvkových map, pokud je přijatelná delší doba potřebná pro výpočet.) 
-
+- Cesta ke složce s prvkovými mapami.
 
 ### Zpracování:
 - Načtení dvojic prvkových map. Obrázky se načítají do cache pro urychlení zpracování stejného obrázku v dalších krocích.
 - Výpočet Pearsonova korelačního koeficientu.
 - Zpracování výsledků ve formátu pandas DataFrame, řazení podle hodnoty r<sup>2</sup>.
 - Uložení do XLS souboru.
+- Zobrazení 2D histogramů a kombinací map v korelační matici.
 
 
 ### Výstup:
 - XLS soubor s výsledky.
-
+- Korelační matice.
 
 
 ## Ukázka:
