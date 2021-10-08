@@ -2,8 +2,9 @@
 https://github.com/almaavu/correlate-element-maps
 
 **Korelace MA-XRF or SEM-EDS prvkových map.** 
- Výpočet Personova korelačního koeficientu dvojic map, uložení tabulky s výsledky do XLS souboru. 
 
+Program pro obrazovou analýzu prvkových map získaných MA-XRF spektroskopií nebo SEM-EDS mikroskopií. Porovnává dvojice prvkových map a hledá míru jejich korelace - společného výskytu prvků, např. obsažených ve stejném pigmentu nebo materiálu podložky. Výsledky jsou uloženy do XLSX tabulky, která pro každou dvojici map uvádí Personův korelační koeficient, koeficient determinace a regresní koeficienty.
+Dalším výstupem je korelační matice zobrazující 2D histogramy dvojic prvkových map a  překryvy map v RGB snímku. 
 
 ### Instalace:
 Instalace programovacího jazyka Python3
@@ -49,15 +50,6 @@ Skript je možné spustit i bez instalace:
 
 ### Výstup:
 - XLS soubor s výsledky.
-
-
-
-### Odkazy:
-
-https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
-
-https://imagej.net/imaging/colocalization-analysis
-
 
 
 
@@ -210,3 +202,14 @@ https://imagej.net/imaging/colocalization-analysis
   </tbody>
 </table>
 <img src="sample/corr_matrix.png" width="800" title="">
+
+
+
+
+### Odkazy:
+
+https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
+
+https://imagej.net/imaging/colocalization-analysis
+
+
