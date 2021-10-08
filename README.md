@@ -17,6 +17,8 @@ correlate-element-maps
 
 ### Dependencies:
 
+    python -m pip install requirements.txt
+    
 * numpy
 * pandas
 * matplotlib
@@ -24,7 +26,6 @@ correlate-element-maps
 * scikit-image
 * imageio
 
-    python -m pip install requirements.txt
 
 ### Usage:
 
