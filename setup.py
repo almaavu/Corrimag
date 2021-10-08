@@ -10,11 +10,10 @@ setup(
     name='element_maps_correlation',
     version='1.0.0',
     url='https://github.com/almaavu/element_maps_correlation/',
-    author='ffsedd',
-    author_email='ffsedd@gmail.com',
+    author='almaavu',
+    author_email='almaavu@gmail.com',
     description='Correlate element maps',
     packages=find_packages(where=''),  # Required
-    #scripts=['qq'],
-    install_requires=['numpy', 'matplotlib', 'imageio', 'scikit-image'],
+    install_requires=['numpy', 'pandas', 'matplotlib', 'imageio', 'scipy', 'scikit-image'],
     include_package_data=True,
 )
