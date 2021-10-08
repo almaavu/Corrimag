@@ -16,12 +16,12 @@ correlate-element-maps
 
 
 ### Required packages:
-numpy
-pandas
-matplotlib
-scipy
-scikit-image
-imageio
+* numpy
+* pandas
+* matplotlib
+* scipy
+* scikit-image
+* imageio
 
 
 ### Usage:
