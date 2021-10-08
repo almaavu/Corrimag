@@ -14,6 +14,16 @@ correlate-element-maps
 
     python -m pip install git+https://github.com/almaavu/correlate-element-maps.git
 
+
+### Required packages:
+numpy
+pandas
+matplotlib
+scipy
+scikit-image
+imageio
+
+
 ### Usage:
 
     python -m correlate_element_maps "d:/maps"
