@@ -15,6 +15,12 @@ Korelační koeficient vyjadřuje, nakolik jsou koncentrace dvou prvků prováza
 
 kde c2, c1 jsou koncentrace prvků, m je směrnice a b je úsek regresní přímky.
 
+Grafické zobrazení korelace pomocí 2D histogramu ukazuje míru korelace i rozložení koncetrace v případě, že jsou prvky obsaženy ve více sloučeninách. 
+
+Následující 2D histogram zobrazuje rozložení koncentrace arsenu a mědi v malbě, ve které jsou As a Cu přítomny ve formě svinibrodské zeleně a Cu je zároveň obsažena samostatně ve formě měděnky.
+
+<img src="sample/As_Cu.jpg" width="400" title="">
+
 
 ## Instalace:
 Instalace programovacího jazyka Python3
