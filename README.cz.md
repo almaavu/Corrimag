@@ -231,5 +231,5 @@ https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
 https://en.wikipedia.org/wiki/Colocalization
 
 <a id="3">[3]</a> 
-(https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3074624/)[A practical guide to evaluating colocalization in biological microscopy]
+[A practical guide to evaluating colocalization in biological microscopy](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3074624/)
 
