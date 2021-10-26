@@ -226,6 +226,7 @@ Skript je možné spustit i bez instalace:
 ### Odkazy:
 <a id="1">[1]</a> 
 https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
+
 <a id="2">[2]</a> 
 https://imagej.net/imaging/colocalization-analysis
 
