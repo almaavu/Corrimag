@@ -1,4 +1,4 @@
-# Correlate-Element-Maps
+# Correlate Element Maps
 https://github.com/almaavu/correlate-element-maps
 
 **Korelace MA-XRF or SEM-EDS prvkových map.** 
@@ -17,7 +17,7 @@ kde c2, c1 jsou koncentrace prvků, m je směrnice a b je úsek regresní přím
 
 ### 2D histogram
 
-Grafické zobrazení korelace pomocí 2D histogramu ukazuje míru korelace i rozložení koncentrace v případě, že jsou prvky obsaženy ve více sloučeninách. Využití je podobné, jako při hledání překryvu snímků metodou kolokalizace ve fluorescenční mikroskopii. [[2]](#2)
+Grafické zobrazení korelace pomocí 2D histogramu ukazuje míru korelace i rozložení koncentrace v případě, že jsou prvky obsaženy ve více sloučeninách. Využití je podobné, jako při hledání překryvu snímků metodou kolokalizace ve fluorescenční mikroskopii. [[2]](#2) [[3]](#3)
 
 Následující 2D histogram zobrazuje rozložení koncentrace arsenu a mědi v malbě, ve které jsou As a Cu přítomny ve formě svinibrodské zeleně a Cu je zároveň obsažena samostatně ve formě měděnky.
 
@@ -228,6 +228,8 @@ Skript je možné spustit i bez instalace:
 https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
 
 <a id="2">[2]</a> 
-https://imagej.net/imaging/colocalization-analysis
+https://en.wikipedia.org/wiki/Colocalization
 
+<a id="3">[3]</a> 
+[[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3074624/|A practical guide to evaluating colocalization in biological microscopy]]
 
