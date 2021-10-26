@@ -4,7 +4,17 @@ https://github.com/almaavu/correlate-element-maps
 **Korelace MA-XRF or SEM-EDS prvkových map.** 
 
 Program pro obrazovou analýzu prvkových map získaných MA-XRF spektroskopií nebo SEM-EDS mikroskopií. Porovnává dvojice prvkových map a hledá míru jejich korelace - společného výskytu prvků, např. obsažených ve stejném pigmentu nebo materiálu podložky. Výsledky jsou uloženy do XLSX tabulky, která pro každou dvojici map uvádí Personův korelační koeficient, koeficient determinace a regresní koeficienty.
+
 Dalším výstupem je korelační matice zobrazující 2D histogramy dvojic prvkových map a  překryvy map v RGB snímku. 
+
+
+## Pearsonův korelační koeficient
+Korelační koeficient vyjadřuje, nakolik jsou koncentrace dvou prvků provázané. Pokud jsou dva prvky součástní stejného pigmentu a nejsou-li obsaženy v další materiálech, např. Hg a S v rumělce, pak v místech s vysokou koncentrací rtuti je i vysoká koncentrace síry. Koncentrace prvků jsou pak do jisté míry lineárně závislé, lze je vyjádřit funkcí ve tvaru 
+    
+    c2 = m * c1 + b 
+
+kde c2, c1 jsou koncentrace prvků, m je směrnice a b je úsek regresní přímky.
+
 
 ### Instalace:
 Instalace programovacího jazyka Python3

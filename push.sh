@@ -4,8 +4,8 @@
 #git rm -r --cached .
 
 
-desc=1
-read -p "Commit description: " desc
+desc=.
+#read -p "Commit description: " desc
 
 
 git add .
