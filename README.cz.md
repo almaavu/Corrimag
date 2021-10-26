@@ -83,6 +83,8 @@ Skript je možné spustit i bez instalace:
 <img src="sample/Zn-KB.jpg" width="100" title="">
 </p>
 
+Prvkové mapy použité na ukázku funkce programu. Soubory jsou uloženy ve složce "samples".
+
 ### Výsledek:
 <table border="1" class="dataframe">
   <thead>
