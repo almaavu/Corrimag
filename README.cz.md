@@ -59,6 +59,7 @@ Skript je možné spustit i bez instalace:
 
 ### Zpracování:
 - Načtení dvojic prvkových map. Obrázky se načítají do cache pro urychlení zpracování stejného obrázku v dalších krocích.
+- Redukce šumu Gaussovým filtrem
 - Výpočet Pearsonova korelačního koeficientu.
 - Zpracování výsledků ve formátu pandas DataFrame, řazení podle hodnoty r.
 - Uložení do XLSX souboru.
@@ -72,18 +73,16 @@ Skript je možné spustit i bez instalace:
 
 ### Konfigurace:
 Parametry jsou uloženy v globální proměnné CFG.
-- _downsize_: výška zmenšeného obrázku v pixelech. Zmenšené snímky program používá pro urychlení výpočtu transformace. Změna velikosti může pomoci, když transformace selže. Vyšší hodnota vede k pomalejšímu výpočtu, výchozí hodnota: 500 pix.  
-- _preprocess_images_: Před výpočtem transformace je lze provést úpravu jasu a kontrastu ("normalize"), equalizaci histogramu ("equalize") nebo detekci hran ("edge")
-- _extract_features_: parametry funkce pro výběr bodů
-- _ransac_: parametry Ransac algoritmu použitého pro výběr odpovídajících dvojic bodů
-- _match_: parametry match algoritmu
+- blur_sigma: míra redukce šumu.  
+- view_gamma: Gamma nastavení pro zobrazení map (úprava jasu a kontrastu)
+- min_r2: parametry funkce pro výběr bodů
+- in_file_mask: filtr souborů podle názvu nebo přípony
+- excluded: ignorované názvy souborů
 
 Výchozí konfigurace:
 ```
     CFG = {
         'blur_sigma': 2,
-        'min_threshold': 0.1,
-        'max_threshold': .95,
         'view_gamma': .6,
         'min_r2': .1,
         'in_file_mask':'*.jpg',
