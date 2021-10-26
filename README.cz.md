@@ -230,6 +230,8 @@ V tabulce je uveden symbol obou prvku, Personův korelační koeficient (r), koe
 
 V levé části matice jsou zobrazeny 2D histogramy dvojic prvků, v pravé části kombinace vzniklé spojením černobílých map do červeného a zeleného kanálu RGB obrázku. Místa s výskytem obou prvků v podobné koncentraci mají žluté zbarvení. V matici jsou dále uvedeny hodnoty Pearsonova korelačního koeficientu, velikost písma vychází z míry pozitivní korelace.
 
+Výsledky ukazují na společný výskyt Hg + S (rumělka), Pb + Cr (chromová žluť) a Ca + Hg + S (směs rumělky a křídy).
+
 ### Odkazy:
 <a id="1">[1]</a> 
 https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
