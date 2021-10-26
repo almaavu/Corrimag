@@ -9,7 +9,7 @@ Dalším výstupem je korelační matice zobrazující 2D histogramy dvojic prvk
 
 
 ### Pearsonův korelační koeficient
-Korelační koeficient vyjadřuje, nakolik jsou koncentrace dvou prvků provázané. Pokud jsou dva prvky součástní stejného pigmentu a nejsou-li obsaženy v další materiálech, např. Hg a S v rumělce, pak v místech s vysokou koncentrací rtuti je i vysoká koncentrace síry. Koncentrace prvků jsou pak do jisté míry lineárně závislé, lze je vyjádřit funkcí ve tvaru 
+Korelační koeficient vyjadřuje, nakolik jsou koncentrace dvou prvků provázané. [[1]](#1) Pokud jsou dva prvky součástní stejného pigmentu a nejsou-li obsaženy v další materiálech, např. Hg a S v rumělce, pak v místech s vysokou koncentrací rtuti je i vysoká koncentrace síry. Koncentrace prvků jsou pak do jisté míry lineárně závislé, lze je vyjádřit funkcí ve tvaru 
     
     c2 = m * c1 + b 
 
@@ -17,7 +17,7 @@ kde c2, c1 jsou koncentrace prvků, m je směrnice a b je úsek regresní přím
 
 ### 2D histogram
 
-Grafické zobrazení korelace pomocí 2D histogramu ukazuje míru korelace i rozložení koncentrace v případě, že jsou prvky obsaženy ve více sloučeninách. 
+Grafické zobrazení korelace pomocí 2D histogramu ukazuje míru korelace i rozložení koncentrace v případě, že jsou prvky obsaženy ve více sloučeninách. Využití je podobné, jako při hledání překryvu snímků metodou kolokalizace ve fluorescenční mikroskopii. [[2]](#2)
 
 Následující 2D histogram zobrazuje rozložení koncentrace arsenu a mědi v malbě, ve které jsou As a Cu přítomny ve formě svinibrodské zeleně a Cu je zároveň obsažena samostatně ve formě měděnky.
 
@@ -60,13 +60,13 @@ Skript je možné spustit i bez instalace:
 ### Zpracování:
 - Načtení dvojic prvkových map. Obrázky se načítají do cache pro urychlení zpracování stejného obrázku v dalších krocích.
 - Výpočet Pearsonova korelačního koeficientu.
-- Zpracování výsledků ve formátu pandas DataFrame, řazení podle hodnoty r<sup>2</sup>.
-- Uložení do XLS souboru.
+- Zpracování výsledků ve formátu pandas DataFrame, řazení podle hodnoty r.
+- Uložení do XLSX souboru.
 - Zobrazení 2D histogramů a kombinací map v korelační matici.
 
 
 ### Výstup:
-- XLS soubor s výsledky.
+- XLSX soubor s výsledky.
 - Korelační matice.
 
 
@@ -224,9 +224,9 @@ Skript je možné spustit i bez instalace:
 
 
 ### Odkazy:
-
+<a id="1">[1]</a> 
 https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
-
+<a id="2">[2]</a> 
 https://imagej.net/imaging/colocalization-analysis
 
 
