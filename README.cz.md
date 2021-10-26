@@ -19,7 +19,7 @@ Grafické zobrazení korelace pomocí 2D histogramu ukazuje míru korelace i roz
 
 Následující 2D histogram zobrazuje rozložení koncentrace arsenu a mědi v malbě, ve které jsou As a Cu přítomny ve formě svinibrodské zeleně a Cu je zároveň obsažena samostatně ve formě měděnky.
 
-<img src="sample/As_Cu.jpg" width="200" title="">
+<img src="sample/j2025/As_Cu.jpg" width="200" title=""> <img src="sample/j2025/As-KB.jpg" width="200" title=""> <img src="sample/j2025/Cu.jpg" width="200" title="">
 
 
 ## Instalace:
