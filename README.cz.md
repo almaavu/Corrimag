@@ -86,7 +86,7 @@ Výchozí konfigurace:
         'view_gamma': .6,
         'min_r2': .1,
         'in_file_mask':'*.jpg',
-        'excluded' : ("Video 1", "mosaic"),
+        'excluded' : ("Video 1", "mosaic", "VIS"),
         }
 ```
 
