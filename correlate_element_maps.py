@@ -47,14 +47,14 @@ COMMENTS_FPATH = SC_FPATH.parent / "correlations_comments.xlsx"
 
 
 CFG = {
-            'oval_mask': False,
+            # 'oval_mask': False,
             'blur_sigma': 2,
             'min_threshold': 0.1,
             'max_threshold': .95,
             'view_gamma': .6,
             'min_r2': .1,
             'in_file_mask':'*.jpg',
-            'in_file_bitdepth':16,
+            # 'in_file_bitdepth':16,
             'excluded' : ("VIS", "Video 1", "mosaic", "parameters", "p", "Rh", "Rh-KA1", "Rh-LA1", "U"),
         }
 

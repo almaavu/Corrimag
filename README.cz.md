@@ -70,6 +70,28 @@ Skript je možné spustit i bez instalace:
 - Korelační matice.
 
 
+### Konfigurace:
+Parametry jsou uloženy v globální proměnné CFG.
+- _downsize_: výška zmenšeného obrázku v pixelech. Zmenšené snímky program používá pro urychlení výpočtu transformace. Změna velikosti může pomoci, když transformace selže. Vyšší hodnota vede k pomalejšímu výpočtu, výchozí hodnota: 500 pix.  
+- _preprocess_images_: Před výpočtem transformace je lze provést úpravu jasu a kontrastu ("normalize"), equalizaci histogramu ("equalize") nebo detekci hran ("edge")
+- _extract_features_: parametry funkce pro výběr bodů
+- _ransac_: parametry Ransac algoritmu použitého pro výběr odpovídajících dvojic bodů
+- _match_: parametry match algoritmu
+
+Výchozí konfigurace:
+```
+    CFG = {
+        'blur_sigma': 2,
+        'min_threshold': 0.1,
+        'max_threshold': .95,
+        'view_gamma': .6,
+        'min_r2': .1,
+        'in_file_mask':'*.jpg',
+        'excluded' : ("Video 1", "mosaic"),
+        }
+```
+
+
 ## Ukázka:
 
 ### Prvkové mapy:
