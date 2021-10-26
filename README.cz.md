@@ -218,10 +218,15 @@ Skript je možné spustit i bez instalace:
     </tr>
   </tbody>
 </table>
+
+
+V tabulce je uveden symbol obou prvku, Personův korelační koeficient (r), koeficient determinace (r2) a regresní koeficienty (m, b).
+
+
+
 <img src="sample/corr_matrix.png" width="800" title="">
 
-
-
+V levé části matice jsou zobrazeny 2D histogramy dvojic prvků, v pravé části kombinace vzniklé spojením černobílých map do červeného a zeleného kanálu RGB obrázku. Místa s výskytem obou prvků v podobné koncentraci mají žluté zbarvení. V matici jsou dále uvedeny hodnoty Pearsonova korelačního koeficientu, velikost písma vychází z míry pozitivní korelace.
 
 ### Odkazy:
 <a id="1">[1]</a> 
