@@ -1,4 +1,4 @@
-# correlate-element-maps
+# Correlate-Element-Maps
 https://github.com/almaavu/correlate-element-maps
 
 **Korelace MA-XRF or SEM-EDS prvkových map.** 
