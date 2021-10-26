@@ -75,7 +75,7 @@ Skript je možné spustit i bez instalace:
 Parametry jsou uloženy v globální proměnné CFG.
 - blur_sigma: míra redukce šumu.  
 - view_gamma: Gamma nastavení pro zobrazení map (úprava jasu a kontrastu)
-- min_r2: parametry funkce pro výběr bodů
+- min_r2: minimální koeficient determinace pro výpočet regresních koeficientů
 - in_file_mask: filtr souborů podle názvu nebo přípony
 - excluded: ignorované názvy souborů
 
