@@ -263,3 +263,9 @@ https://en.wikipedia.org/wiki/Colocalization
 <a id="3">[3]</a> 
 [A practical guide to evaluating colocalization in biological microscopy](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3074624/)
 
+
+---
+
+_Software je výsledkem projektu NAKI II:  Neinvazivní výzkum portrétních miniatur pro účely jejich datace, autentikace, prezentace a ochrany, číslo projektu: DG18P02OVV034_
+
+
