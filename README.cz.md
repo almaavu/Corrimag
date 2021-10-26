@@ -8,7 +8,7 @@ Program pro obrazovou analýzu prvkových map získaných MA-XRF spektroskopií 
 Dalším výstupem je korelační matice zobrazující 2D histogramy dvojic prvkových map a  překryvy map v RGB snímku. 
 
 
-## Pearsonův korelační koeficient
+# Pearsonův korelační koeficient
 Korelační koeficient vyjadřuje, nakolik jsou koncentrace dvou prvků provázané. Pokud jsou dva prvky součástní stejného pigmentu a nejsou-li obsaženy v další materiálech, např. Hg a S v rumělce, pak v místech s vysokou koncentrací rtuti je i vysoká koncentrace síry. Koncentrace prvků jsou pak do jisté míry lineárně závislé, lze je vyjádřit funkcí ve tvaru 
     
     c2 = m * c1 + b 
