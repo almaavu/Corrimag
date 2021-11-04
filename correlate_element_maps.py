@@ -104,12 +104,17 @@ def main():
 
     # get root dir from command line or use default
     root = argv[1] if len(argv) > 1 else "sample"
-
+    print(root)
+    
     # get all files in root dir
-    root = Path(root)
+    root = Path(root).resolve()
+    print(root)
     fs = sorted(list(root.glob(CFG["in_file_mask"])))
     fs = [f for f in fs if f.stem not in CFG["excluded"]]
-
+    print(fs)
+    if not fs:
+        return
+    
     # get all paths combinations
     pairs = list(itertools.combinations(fs, 2))
     # print(pairs)
@@ -329,7 +334,7 @@ def plot_corr_matrix(paths, bins=60, norm=LogNorm(), outdir="."):
 
     plt.tight_layout()
     plt.savefig(outdir / 'corr_matrix.png', dpi=150)
-    plt.show()
+    # plt.show()
 
 
 
