@@ -47,11 +47,13 @@ Instalace knihoven:
 
 ## Použití:
 
-    python -m correlate_element_maps --maps-dir="d:/maps"
+    python -m correlate_element_maps "d:/maps"
+    
+    kde d:/maps je cesta ke složce se vstupními soubory
     
 Skript je možné spustit i bez instalace:
 
-    python correlate_element_maps.py --maps-dir="d:/maps"
+    python correlate_element_maps.py "d:/maps"
 
 
 ### Vstup: 
