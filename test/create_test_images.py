@@ -7,7 +7,7 @@ LETTERS = "bhoilx^"
 
 # select font
 if platform.system() == "Windows":
-    fnt = ImageFont.truetype('Arial.ttf', 15) 
+    fnt = ImageFont.truetype('ArialBold.ttf', 80) 
 else:    
     fnt = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 80)  
 
