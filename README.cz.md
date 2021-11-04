@@ -255,7 +255,7 @@ Výsledky ukazují na společný výskyt Hg + S (rumělka), Pb + Cr (chromová �
 ## Ukázka 2:
 Funkce programu je patrná ze zpracování testovacích obrázků.
 
-Vstupní soubory:
+### Vstupní soubory:
 Obrázky rozostřených písmen vytvořené skriptem [create_test_images.py](test/create_test_images.py)
 
 <p>
@@ -268,7 +268,7 @@ Obrázky rozostřených písmen vytvořené skriptem [create_test_images.py](tes
 <img src="test/x.jpg" width="50" title="">
 </p>
 
-Korelační matice:
+### Korelační matice:
 
 <img src="test/corr_matrix.png" width="600" title="">
 
