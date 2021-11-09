@@ -3,7 +3,7 @@
 import platform
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
  
-LETTERS = "bhoilx^"
+LETTERS = "bhoilxT"
 
 # select font
 if platform.system() == "Windows":
