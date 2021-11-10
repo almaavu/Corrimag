@@ -1,5 +1,5 @@
-# correlate-element-maps
-https://github.com/almaavu/correlate-element-maps
+# Corrimag
+https://github.com/almaavu/Corrimag
 
 **Correlation of MA-XRF or SEM-EDS element maps.** 
  
