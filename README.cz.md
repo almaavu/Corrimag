@@ -1,5 +1,5 @@
-# Correlate Element Maps
-https://github.com/almaavu/correlate-element-maps
+# ALMA Corrimag
+https://github.com/almaavu/Corrimag
 
 **Korelace MA-XRF or SEM-EDS prvkových map.** 
 
@@ -29,9 +29,9 @@ Instalace programovacího jazyka Python3
 
     https://www.python.org/downloads/
     
-Instalace programu correlate-element-maps
+Instalace programu ALMA Corrimag
 
-    python -m pip install git+https://github.com/almaavu/correlate-element-maps.git
+    python -m pip install git+https://github.com/almaavu/Corrimag.git
 
 Instalace knihoven:
 
