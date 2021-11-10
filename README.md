@@ -1,4 +1,4 @@
-# Corrimag
+# ALMA Corrimag
 https://github.com/almaavu/Corrimag
 
 **Correlation of MA-XRF or SEM-EDS element maps.** 
@@ -10,9 +10,9 @@ Python3
 
     https://www.python.org/downloads/
     
-correlate-element-maps
+ALMA Corrimag
 
-    python -m pip install git+https://github.com/almaavu/correlate-element-maps.git
+    python -m pip install git+https://github.com/almaavu/Corrimag.git
 
 
 ### Dependencies:
@@ -29,11 +29,11 @@ correlate-element-maps
 
 ### Usage:
 
-    python -m correlate_element_maps "d:/maps"
+    python -m corrimag "d:/maps"
     
 Without installation:
 
-    python correlate_element_maps.py "d:/maps"
+    python corrimag.py "d:/maps"
 
 
 ### Input: 
