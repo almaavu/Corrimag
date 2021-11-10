@@ -263,7 +263,7 @@ Funkce programu je patrná ze zpracování testovacích obrázků.
 Obrázky rozostřených písmen vytvořené skriptem [create_test_images.py](test/create_test_images.py)
 
 <p>
-<img src="test/^.jpg" width="50" title="">
+<img src="test/T.jpg" width="50" title="">
 <img src="test/b.jpg" width="50" title="">
 <img src="test/h.jpg" width="50" title="">
 <img src="test/i.jpg" width="50" title="">
