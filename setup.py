@@ -7,9 +7,9 @@ import sys
 
     
 setup(
-    name='element_maps_correlation',
-    version='1.0.0',
-    url='https://github.com/almaavu/element_maps_correlation/',
+    name='ALMA Corrimag',
+    version='1.1',
+    url='https://github.com/almaavu/Corrimag/',
     author='almaavu',
     author_email='almaavu@gmail.com',
     description='Correlate element maps',
