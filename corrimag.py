@@ -251,7 +251,7 @@ def pearson_correlation(x, y):
     r = np.ma.corrcoef(x, y)[0, 1]
     r2 = r**2
     coef = (np.nan, np.nan)
-    if r2 >= CFG['min_r2']:
+    if r2 >= CFG['min_r2']:  # no use to calculate coef. with weak correlation
         try:
             coef = np.ma.polyfit(y, x, deg=1)   # y,x => ratio el1 / el2
         except BaseException:
