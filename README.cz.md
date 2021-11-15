@@ -3,7 +3,7 @@ https://github.com/almaavu/Corrimag
 
 **Korelace MA-XRF or SEM-EDS prvkových map.** 
 
-Program pro obrazovou analýzu prvkových map získaných MA-XRF spektroskopií nebo SEM-EDS mikroskopií. Porovnává dvojice prvkových map a hledá míru jejich korelace - společného výskytu prvků, např. obsažených ve stejném pigmentu nebo materiálu podložky. Výsledky jsou uloženy do XLSX tabulky, která pro každou dvojici map uvádí Pearsonův korelační koeficient, koeficient determinace a regresní koeficienty. [[1]](#1)
+ALMA Corrimag je program určený pro obrazovou analýzu prvkových map získaných MA-XRF spektroskopií nebo SEM-EDS mikroskopií. Porovnává dvojice prvkových map a hledá míru jejich korelace - společného výskytu prvků, např. obsažených ve stejném pigmentu nebo materiálu podložky. Výsledky jsou uloženy do XLSX tabulky, která pro každou dvojici map uvádí Pearsonův korelační koeficient, koeficient determinace a regresní koeficienty. [[1]](#1)
 
 Dalším výstupem je korelační matice zobrazující 2D histogramy dvojic prvkových map a  překryvy map v RGB snímku. 
 
@@ -19,17 +19,18 @@ kde c2, c1 jsou koncentrace prvků, m je směrnice a b je úsek regresní přím
 
 Grafické zobrazení korelace pomocí 2D histogramu ukazuje míru korelace i rozložení koncentrace v případě, že jsou prvky obsaženy ve více sloučeninách. Využití je podobné, jako při hledání překryvu snímků metodou kolokalizace ve fluorescenční mikroskopii. [[2]](#2) [[3]](#3)
 
-Následující 2D histogram zobrazuje rozložení koncentrace arsenu a mědi v malbě, ve které jsou As a Cu přítomny ve formě svinibrodské zeleně a Cu je zároveň obsažena samostatně ve formě měděnky.
+Následující 2D histogram zobrazuje rozložení koncentrace arzenu a mědi v malbě, ve které jsou arzen a měď přítomny ve formě svinibrodské zeleně a měď je zároveň obsažena samostatně ve formě měděnky.
 
 <img src="sample/j2025/As_Cu.jpg" width="200" title=""> <img src="sample/j2025/2025.jpg" width="150" title=""> <img src="sample/j2025/As-KB.jpg" width="150" title=""> <img src="sample/j2025/Cu.jpg" width="150" title="">
 
 
 ## Instalace:
-Instalace programovacího jazyka Python3
+
+Instalace programovacího jazyka Python3:
 
     https://www.python.org/downloads/
     
-Instalace programu ALMA Corrimag
+Instalace programu ALMA Corrimag:
 
     python -m pip install git+https://github.com/almaavu/Corrimag.git
 
